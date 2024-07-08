@@ -8,7 +8,7 @@ interface UseTypewritterProps {
   onTyping: (typedText: string) => void;
 }
 
-function UseTypewriter({ text, speed = 30, onTyping }: UseTypewritterProps) {
+function UseTypewriter({ text, speed = 50, onTyping }: UseTypewritterProps) {
   useEffect(() => {
     let index = 0;
     const intervalId = setInterval(() => {
