@@ -2,6 +2,9 @@
 
 import { requestToGroqAI } from "@/utils/groq";
 import { ChangeEvent, FormEvent, useState } from "react";
+import { Prism as SyntaxHighlight } from "react-syntax-highlighter";
+import { darcula } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import UseTypewriter from "../_utils/UseTypewriter";
 
 interface messageAIProps {
   content: string;
@@ -41,6 +44,7 @@ interface ContentAIProps {
 function ContentAI() {
   const [inputValue, setInputValue] = useState<string>("");
   const [content, setContent] = useState<ContentAIProps>();
+  const [typingContent, setTypingContent] = useState("");
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -59,7 +63,6 @@ function ContentAI() {
       usage: AI.usage,
     };
     setContent(contentAIProp);
-    console.log(contentAIProp);
   };
 
   return (
@@ -91,12 +94,22 @@ function ContentAI() {
       </form>
 
       {content && (
-        <div className="flex max-w-[600px] w-full bg-gray-600 p-4 rounded-md items-center justify-center h-full">
+        <div className="flex max-w-[600px] w-full bg-gray-800 p-1 rounded-md items-center justify-center h-full">
           {content?.choices.map((d) => (
             <div className="flex flex-col w-full h-full" key={d.index}>
-              {d.message.content.split("\n\n").map((paragraph, i) => (
-                <div key={i}></div>
-              ))}
+              <UseTypewriter
+                text={d.message.content}
+                onTyping={setTypingContent}
+                speed={50}
+              />
+              <SyntaxHighlight
+                className="w-full h-full"
+                language="swift"
+                style={darcula}
+                wrapLongLines={true}
+              >
+                {typingContent}
+              </SyntaxHighlight>
             </div>
           ))}
         </div>
